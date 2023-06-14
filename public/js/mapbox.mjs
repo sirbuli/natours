@@ -8,9 +8,6 @@ export const displayMap = (locations) => {
     container: 'map',
     style: 'mapbox://styles/bulish/cli4m5sy002ik01r0cjrpdgah',
     scrollZoom: false,
-    // center: [-118.11, 34.11],
-    // zoom: 9,
-    // interactive: false,
   });
 
   const bounds = new mapboxgl.LngLatBounds();

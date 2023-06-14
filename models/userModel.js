@@ -87,9 +87,8 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
       10
     );
 
-    return JWTTimestamp < changedTimestamp; // 100 < 200
+    return JWTTimestamp < changedTimestamp;
   }
-  // this = odnosi się do tego dokumentu
 
   // false means NOT changed
   return false;

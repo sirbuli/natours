@@ -48,8 +48,6 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       validate: {
         validator: function (value) {
-          // słowo this jest tylko dostępne podczas tworzenia nowych zależności
-          // ale podczas updatingu już nie jest dostępne
           return value < this.price;
         },
         message: 'Discount price ({VALUE}) should be below regular price',
@@ -80,7 +78,6 @@ const tourSchema = new mongoose.Schema(
       default: false,
     },
     startLocation: {
-      // GeoJSON
       type: {
         type: String,
         default: 'Point',
@@ -116,7 +113,6 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
-// tourSchema.index({ price: 1 });
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
 tourSchema.index({ startLocation: '2dsphere' });
@@ -145,22 +141,9 @@ tourSchema.pre('save', async function (next) {
   next();
 });
 
-// tourSchema.pre('save', function (next) {
-//   console.log('Will save document...');
-//   next();
-// });
-
-// tourSchema.post('save', function (doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, function (next) {
-  // w tym wypadku regular expression wybiera nam wszystkie nazwy których początkiem jest find
-  // tourSchema.pre('find', function (next) {
   this.find({ secretTour: { $ne: true } });
-
   this.start = Date.now();
   next();
 });
@@ -172,19 +155,6 @@ tourSchema.pre(/^find/, function (next) {
   });
   next();
 });
-
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds`);
-  next();
-});
-
-// AGGREGATION MIDDLEWARE
-// tourSchema.pre('aggregate', function (next) {
-//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-
-//   console.log(this.pipeline());
-//   next();
-// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 

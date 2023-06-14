@@ -30,7 +30,6 @@ const connectDB = async () => {
     .then(() => console.log('DB connection successful'));
 
   // IMPORT DATA INTO DB
-
   const importData = async () => {
     try {
       await Tour.create(tours);

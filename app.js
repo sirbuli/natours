@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -22,12 +23,10 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARES
-
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set scurity HTTP headers
-//
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 
 app.use(
@@ -97,6 +96,8 @@ app.use(
   })
 );
 
+app.use(compression());
+
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -104,18 +105,13 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-
 app.use('/', viewRouter);
-app.use('/api/v1/tours', tourRouter); // Mounting the router = w ten sposób pod tourRouter zapisujemy podaną ściężkę
+app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
-  // const err = new Error(`Can't find ${req.originalUrl} on the server!`);
-  // err.status = 'fail';
-  // err.statusCode = 404;
-
   next(new AppError(`Can't find ${req.originalUrl} on the server!`, 404));
 });
 

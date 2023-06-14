@@ -5,8 +5,6 @@ const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
-// router.param('id', tourController.checkID);
-
 router.use('/:tourId/reviews', reviewRouter);
 
 router
@@ -27,16 +25,6 @@ router
   .get(tourController.getToursWithin);
 
 router.route('/distances/:latlng/unit/:unit').get(tourController.getDistances);
-
-// app.get('/api/v1/tours', getAllTours);
-// app.post('/api/v1/tours', createTour);
-// app.get('/api/v1/tours/:id', getTour);
-// app.patch('/api/v1/tours/:id', updateTour);
-// app.delete('/api/v1/tours/:id', deleteTour);
-
-// ten zapis oznacza dokładnie to samo co wyżej, ten zapis jest ładniejszy
-// route służy do definiowania ścieżek
-
 router
   .route('/')
   .get(tourController.getAllTours)

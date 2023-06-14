@@ -48,7 +48,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
   await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, res);
@@ -153,8 +152,6 @@ exports.isLoggedIn = async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    // roles ['admin', 'lead-guide']. role='user' -- default
-
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError('You do not have permission to perform this action', 403)
@@ -198,7 +195,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   }
 });
 exports.resetPassword = catchAsync(async (req, res, next) => {
-  // 1) get user based on the token
+  // 1) Get user based on the token
   const hashedToken = crypto
     .createHash('sha256')
     .update(req.params.token)
@@ -219,9 +216,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
 
-  // 3) Update changedPasswordAt property for the user
-
-  // 4) Log the user in, send JWT
+  // 3) Log the user in, send JWT
   createSendToken(user, 200, res);
 });
 
@@ -238,7 +233,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
-  // user.findByIdAndUpdate() not
 
   // 4) Log user in, sent JWT
   createSendToken(user, 200, res);
