@@ -13,7 +13,7 @@ You can test the application by log in with the provided data
 
 # Features
 
-    Users can browse available tours, choose the options that interest them and make online bookings.
+    Users can search available tours, choose the options that interest them and make online bookings.
     The application offers safe and convenient online payment methods provided by Stripe.
     Users can change name, email, photo and password.
     The user can see all his bookings.
